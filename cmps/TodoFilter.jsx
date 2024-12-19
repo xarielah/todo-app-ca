@@ -1,18 +1,22 @@
-import { todoService } from "../services/todo.service.js";
 import { utilService } from "../services/util.service.js";
+import { SET_FILTER_BY } from "../store/reducers/todoReducer.js";
+import { store } from "../store/store.js";
 
 const { useSelector } = ReactRedux
 const { useRef, useState, useEffect } = React
 const { useSearchParams } = ReactRouterDOM
 
-export function TodoFilter() {
-    const [searchParams, setSearchParams] = useSearchParams()
-    const [filterBy, setFilterBy] = useState(todoService.getFilterFromSearchParams(searchParams))
+export function TodoFilter({ storeFilterBy }) {
+    const [filterBy, setFilterBy] = useState({})
     const onFilterDebounce = useRef(utilService.debounce(handleFilterChange, 500)).current
 
     useEffect(() => {
-        onFilterDebounce({ ...filterBy })
-    }, [filterBy])
+        setFilterBy(storeFilterBy)
+    }, []);
+
+    function handleFilterChange(filterBy) {
+        store.dispatch({ type: SET_FILTER_BY, payload: { ...filterBy } })
+    }
 
     function handleChange({ target }) {
         const field = target.name
@@ -32,13 +36,11 @@ export function TodoFilter() {
         }
 
         setFilterBy({ ...filterBy, [field]: value })
+        onFilterDebounce({ ...filterBy, [field]: value });
     }
 
-    function handleFilterChange(filterBy) {
-        setSearchParams(utilService.getTruthyValues(filterBy))
-    }
 
-    const { txt, importance } = filterBy
+    const { txt = '', importance = '' } = filterBy
     return (
         <section className="todo-filter">
             <h2>Filter Todos</h2>

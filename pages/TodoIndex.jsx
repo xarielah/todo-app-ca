@@ -12,24 +12,24 @@ const { useSelector } = ReactRedux
 
 export function TodoIndex() {
     const { todos, loading } = useSelector(state => state.todoReducer);
-
-    // Special hook for accessing search-params:
-    const [searchParams, setSearchParams] = useSearchParams()
-    const { filterBy: filterByFromStore } = useSelector(state => state.todoReducer);
+    const { filterBy } = useSelector(state => state.todoReducer);
+    const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
-        setSearchParams(filterByFromStore)
-        todoService.query(filterByFromStore)
+        store.dispatch({
+            type: SET_FILTER_BY,
+            payload: { ...todoService.getFilterFromSearchParams(searchParams) }
+        })
+    }, [])
+
+    useEffect(() => {
+        setSearchParams(filterBy)
+        todoService.query()
             .catch(err => {
-                console.eror('err:', err)
+                console.error('err:', err)
                 showErrorMsg('Cannot load todos')
             })
-    }, [filterByFromStore])
-
-    useEffect(() => {
-        const filterByParams = todoService.getFilterFromSearchParams(searchParams)
-        store.dispatch({ type: SET_FILTER_BY, payload: { ...filterByParams } })
-    }, [searchParams])
+    }, [filterBy])
 
     function onRemoveTodo(todoId) {
         todoService.remove(todoId)
@@ -58,7 +58,7 @@ export function TodoIndex() {
     if (loading) return <div>Loading...</div>
     return (
         <section className="todo-index">
-            <TodoFilter />
+            <TodoFilter storeFilterBy={filterBy} />
             <div>
                 <Link to="/todo/edit" className="btn" >Add Todo</Link>
             </div>
