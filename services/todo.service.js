@@ -59,14 +59,13 @@ function save(todo) {
         return storageService.put(TODO_KEY, todo)
     } else {
         todo.createdAt = todo.updatedAt = Date.now()
-        todo.color = utilService.makeColor();
         store.dispatch({ type: ADD_TODO, payload: todo })
         return storageService.post(TODO_KEY, todo)
     }
 }
 
 function getEmptyTodo(txt = '', importance = 5) {
-    return { txt, importance, isDone: false }
+    return { txt, importance, isDone: false, color: utilService.makeColor() }
 }
 
 function getDefaultFilter() {

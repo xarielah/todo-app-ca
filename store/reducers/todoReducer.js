@@ -26,14 +26,14 @@ export const todoReducer = (state = initialState, action = {}) => {
                 ...state,
                 todos: [
                     ...state.todos,
-                    ...action.payload
+                    action.payload
                 ],
                 todoCount: state.todoCount + 1
             })
         case UPDATE_TODO:
             return ({
                 ...state,
-                todos: (state.todos || []).map(todo => {
+                todos: state.todos.map(todo => {
                     if (todo.id === action.payload.id) {
                         return action.payload
                     }
