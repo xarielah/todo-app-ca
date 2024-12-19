@@ -20,7 +20,7 @@ export const todoService = {
 window.cs = todoService
 
 function query() {
-    const filterBy = store.getState().todoReducer.filterBy
+    const { filterBy } = store.getState().todoReducer
     store.dispatch({ type: TODO_LOAD })
     return storageService.query(TODO_KEY)
         .then(todos => {
@@ -110,6 +110,7 @@ function _createTodo(txt, importance) {
     const todo = getEmptyTodo(txt, importance)
     todo._id = utilService.makeId()
     todo.createdAt = todo.updatedAt = Date.now() - utilService.getRandomIntInclusive(0, 1000 * 60 * 60 * 24)
+    todo.color = utilService.makeColor();
     return todo
 }
 

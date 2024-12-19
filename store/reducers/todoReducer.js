@@ -8,7 +8,7 @@ export const TODO_LOAD = "TODO_LOAD";
 export const SET_FILTER_BY = "SET_FILTER_BY";
 
 const initialState = {
-    loading: false,
+    loading: true,
     todos: [],
     totalCount: 0,
     filterBy: { txt: "", importance: "" },
@@ -43,13 +43,15 @@ export const todoReducer = (state = initialState, action = {}) => {
         case REMOVE_TODO:
             return ({
                 ...state,
-                todos: (state.todos || []).filter(todo => todo.id !== action.payload),
+                todos: state.todos.filter(todo => todo._id !== action.payload),
                 todoCount: state.todoCount - 1
             })
         case SET_TODOS:
             return ({
                 ...state,
-                todos: action.payload
+                todos: [
+                    ...action.payload
+                ]
             })
         case DONE_TODO_LOADING:
             return ({
