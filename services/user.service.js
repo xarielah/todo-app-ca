@@ -31,8 +31,6 @@ function login({ username, password }) {
         .then(users => {
             const user = users.find(user => user.username === username)
             if (user) {
-                activityService.loadUserActivities(user._id)
-                console.log("🚀 ~ login ~ user._id:", user._id)
                 return _setLoggedinUser(user)
             }
             else return Promise.reject('Invalid login')
