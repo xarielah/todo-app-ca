@@ -1,3 +1,5 @@
+import { UserActivity } from "./UserActivity.jsx";
+
 const { useSelector } = ReactRedux;
 
 export const UserActivities = () => {
@@ -8,9 +10,9 @@ export const UserActivities = () => {
         <h2>Your activities</h2>
         {activities.length === 0 && <p>No activities yet</p>}
         {activities.length > 0 &&
-            <ul>
+            <ul style={{ listStyle: "none" }}>
                 {activities.map(activity =>
-                    <li key={activity._id}>{activity.action}</li>
+                    <UserActivity activity={activity} key={activity._id} />
                 )}
             </ul>
         }
