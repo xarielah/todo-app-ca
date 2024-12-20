@@ -45,12 +45,22 @@ export function TodoFilter({ storeFilterBy }) {
         <section className="todo-filter">
             <h2>Filter Todos</h2>
             <form onSubmit={e => e.preventDefault()}>
-                <input value={txt} onChange={handleChange}
-                    type="search" placeholder="By Txt" id="txt" name="txt"
+                <input
+                    value={txt}
+                    onChange={handleChange}
+                    type="search"
+                    placeholder="By Txt"
+                    id="txt"
+                    name="txt"
                 />
                 <label htmlFor="importance">Importance: </label>
-                <input value={importance} onChange={handleChange}
-                    type="number" placeholder="By Importance" id="importance" name="importance"
+                <input
+                    value={importance}
+                    onChange={handleChange}
+                    type="number"
+                    placeholder="By Importance"
+                    id="importance"
+                    name="importance"
                 />
             </form>
         </section>

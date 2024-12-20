@@ -5,7 +5,6 @@ const { useState, useEffect } = React
 const { useNavigate, useParams } = ReactRouterDOM
 
 export function TodoEdit() {
-
     const [todoToEdit, setTodoToEdit] = useState(todoService.getEmptyTodo())
     const navigate = useNavigate()
     const params = useParams()
