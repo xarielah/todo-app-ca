@@ -8,6 +8,6 @@ const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOO
 const reducers = combineReducers({
     userReducer,
     todoReducer
-}, composeEnhancers());
+});
 
-export const store = createStore(reducers);
+export const store = createStore(reducers, composeEnhancers());
