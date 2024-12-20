@@ -1,6 +1,8 @@
-import { ADD_TODO, DONE_TODO_LOADING, REMOVE_TODO, SET_TODOS, TODO_LOAD, UPDATE_TODO } from '../store/reducers/todoReducer.js'
+import { ADD_TODO, DONE_TODO_LOADING, REMOVE_TODO, SET_TODOS, UPDATE_TODO, UPDATE_TODO_COUNT } from '../store/reducers/todoReducer.js'
 import { store } from '../store/store.js'
+import { activityService } from './activity.service.js'
 import { storageService } from './async-storage.service.js'
+import { userService } from './user.service.js'
 import { utilService } from './util.service.js'
 
 const TODO_KEY = 'todoDB'
@@ -21,9 +23,14 @@ window.cs = todoService
 
 function query() {
     const { filterBy } = store.getState().todoReducer
-    store.dispatch({ type: TODO_LOAD })
     return storageService.query(TODO_KEY)
         .then(todos => {
+            store.dispatch({
+                type: UPDATE_TODO_COUNT, payload: {
+                    total: todos.length,
+                    done: todos.filter(todo => todo.isDone).length
+                }
+            })
             if (filterBy.txt) {
                 const regExp = new RegExp(filterBy.txt, 'i')
                 todos = todos.filter(todo => regExp.test(todo.txt))
@@ -48,6 +55,8 @@ function get(todoId) {
 
 function remove(todoId) {
     store.dispatch({ type: REMOVE_TODO, payload: todoId })
+    // Add activity
+    activityService.add()
     return storageService.remove(TODO_KEY, todoId)
 }
 
@@ -56,11 +65,17 @@ function save(todo) {
         // TODO - updatable fields
         todo.updatedAt = Date.now()
         store.dispatch({ type: UPDATE_TODO, payload: todo })
+        activityService.add("User has updated todo with id: " + todo._id)
         return storageService.put(TODO_KEY, todo)
     } else {
         todo.createdAt = todo.updatedAt = Date.now()
         store.dispatch({ type: ADD_TODO, payload: todo })
         return storageService.post(TODO_KEY, todo)
+            .then(todo => {
+                userService.addUserBalance(10)
+                activityService.add("User has added todo with id: " + todo._id)
+                return todo;
+            })
     }
 }
 
