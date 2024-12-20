@@ -2,12 +2,12 @@
   box-sizing: border-box;
 }
 
-html {
-}
+html {}
 
 body {
   margin: 0;
   color: var(--gray3);
+  background-color: var(--background-secondary);
 }
 
 h1,
@@ -30,7 +30,12 @@ a {
   cursor: pointer;
 }
 
-
+input {
+  border: 1px solid gray;
+  padding: 0.5em;
+  font-size: .8rem;
+  border-radius: 10px;
+}
 
 /* Dont stretch my Media */
 img,
@@ -45,9 +50,8 @@ object {
   outline: 1px solid gold
 }
 
-
 .about nav a {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .done {

@@ -1,0 +1,11 @@
+.main-todo-wrapper {
+    display: grid;
+    grid-template-columns: minmax(auto, 300px) 1fr;
+    gap: 1em;
+    height: 100%;
+    min-height: 0;
+}
+
+.todo-index {
+    height: 100%;
+}

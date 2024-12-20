@@ -10,7 +10,7 @@ export const UserActivities = () => {
         <h2>Your activities</h2>
         {activities.length === 0 && <p>No activities yet</p>}
         {activities.length > 0 &&
-            <ul style={{ listStyle: "none" }}>
+            <ul className="user-activities-list">
                 {activities.map(activity =>
                     <UserActivity activity={activity} key={activity._id} />
                 )}

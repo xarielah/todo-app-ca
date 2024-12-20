@@ -1,15 +1,30 @@
 .todo-list {
-    padding: 15px 0 0;
-    list-style: none;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 15px;
+    list-style: none;
+    padding-top: 5px;
+    align-items: start;
+    grid-template-rows: repeat(auto-fill, 75px);
+    gap: 2em;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    overflow-x: auto;
+    max-height: 100%;
+    min-height: 0;
 }
 
-.todo-list li {
+.todo-list>li>div {
     display: flex;
-    flex-direction: column;
-    justify-content: space-around;
     align-items: center;
-    background-color: var(--clr1bg);
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    justify-content: space-between;
+    padding: 0 1em;
+    background-color: var(--background-main);
+    flex-grow: 1;
+}
+
+.todo-list>li {
+    display: flex;
+    align-items: center;
+    gap: 2em;
 }

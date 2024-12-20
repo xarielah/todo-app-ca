@@ -1,9 +1,10 @@
 .todo-preview {
-    text-align: center;
-    padding: 0.3em;
     display: flex;
-    flex-direction: column;
+    text-align: center;
+    gap: .5em;
+    padding: 0.3em;
     align-items: center;
+    justify-content: space-between;
 }
 
 .todo-preview h4 {
@@ -11,6 +12,61 @@
     color: black;
 }
 
+.todo-preview h2 {
+    cursor: pointer;
+}
+
 .todo-preview img {
     max-width: 100px;
+}
+
+.importance>* {
+    font-size: 0.8em;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.importance {
+    border-radius: 5px;
+    border: 1px solid #aaaaaa80;
+}
+
+.importance>span:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    padding: 0.2em 0.5em;
+}
+
+.importance>span:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding: 0.2em 0.5em;
+}
+
+.importance-low span:first-child {
+    background-color: var(--supportive-green-darker);
+    color: white;
+}
+
+.importance-normal span:first-child {
+    background-color: var(--supportive-yellow-darker);
+}
+
+.importance-urgent span:first-child {
+    background-color: var(--supportive-red-darker);
+    color: white;
+}
+
+.importance-low>span:last-child {
+    background-color: var(--supportive-green);
+    color: white;
+}
+
+.importance-normal>span:last-child {
+    background-color: var(--supportive-yellow);
+}
+
+.importance-urgent>span:last-child {
+    color: white;
+    background-color: var(--supportive-red);
 }

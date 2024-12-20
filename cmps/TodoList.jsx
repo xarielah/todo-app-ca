@@ -38,13 +38,16 @@ export function TodoList({ todos, onRemoveTodo, onToggleTodo }) {
                 </footer>
             </dialog>
             <ul className="todo-list">
-                {todos.map(todo =>
-                    <li key={todo._id} style={{ borderTop: `10px solid ${todo.color}` }}>
-                        <TodoPreview
-                            onRemoveTodo={onRemoveTodo}
-                            todo={todo}
-                            onToggleTodo={() => onToggleTodo(todo)}
-                        />
+                {todos.length === 0 && <p>There are no todos to show here.</p>}
+                {todos.length > 0 && todos.map(todo =>
+                    <li key={todo._id}>
+                        <div style={{ borderLeft: `5px solid ${todo.color}` }}>
+                            <TodoPreview
+                                onRemoveTodo={onRemoveTodo}
+                                todo={todo}
+                                onToggleTodo={() => onToggleTodo(todo)}
+                            />
+                        </div>
                         <section>
                             <button onClick={() => setRemoveTodoId(todo._id)}>Remove</button>
                             <button><Link to={`/todo/${todo._id}`}>Details</Link></button>

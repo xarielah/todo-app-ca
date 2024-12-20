@@ -4,11 +4,13 @@ import { store } from "../store/store.js";
 
 const { useSelector } = ReactRedux
 const { useRef, useState, useEffect } = React
-const { useSearchParams } = ReactRouterDOM
+const { Link } = ReactRouterDOM
 
 export function TodoFilter({ storeFilterBy }) {
     const [filterBy, setFilterBy] = useState({})
     const onFilterDebounce = useRef(utilService.debounce(handleFilterChange, 500)).current
+    const { user } = useSelector(state => state.userReducer);
+
 
     useEffect(() => {
         setFilterBy(storeFilterBy)
@@ -42,27 +44,37 @@ export function TodoFilter({ storeFilterBy }) {
 
     const { txt = '', importance = '' } = filterBy
     return (
-        <section className="todo-filter">
+        <aside className="todo-filter">
             <h2>Filter Todos</h2>
             <form onSubmit={e => e.preventDefault()}>
-                <input
-                    value={txt}
-                    onChange={handleChange}
-                    type="search"
-                    placeholder="By Txt"
-                    id="txt"
-                    name="txt"
-                />
-                <label htmlFor="importance">Importance: </label>
-                <input
-                    value={importance}
-                    onChange={handleChange}
-                    type="number"
-                    placeholder="By Importance"
-                    id="importance"
-                    name="importance"
-                />
+                <label htmlFor="txt" style={{ display: 'grid', alignItems: 'center' }}>
+                    <span>Text: </span>
+                    <input
+                        value={txt}
+                        autoFocus
+                        onChange={handleChange}
+                        type="search"
+                        id="txt"
+                        name="txt"
+                    />
+                </label>
+                <label htmlFor="importance" style={{ display: 'grid', alignItems: 'center' }}>
+                    <span>Importance: {importance} and above.</span>
+                    <input
+                        value={importance}
+                        onChange={handleChange}
+                        type="range"
+                        placeholder="By Importance"
+                        id="importance"
+                        min={1}
+                        max={10}
+                        name="importance"
+                    />
+                </label>
             </form>
-        </section>
+            {user && <button>
+                <Link to="/todo/edit" className="btn">Add Todo</Link>
+            </button>}
+        </aside>
     )
 }

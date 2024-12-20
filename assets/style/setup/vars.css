@@ -11,4 +11,18 @@
   --gray2: rgb(155, 155, 155);
   --gray3: rgb(44, 44, 44);
 
-} 
+
+  /* Primary Colors */
+  --primary-light: #6161FF;
+  --primary-dark: #181B34;
+
+  --background-main: #FFFFFF;
+  --background-secondary: #F0F3FF;
+
+  --supportive-green: #00CA72;
+  --supportive-yellow: #FFCC00;
+  --supportive-red: #FB275D;
+  --supportive-green-darker: #00a45d;
+  --supportive-yellow-darker: #e1b400;
+  --supportive-red-darker: #cf1e4a;
+}

@@ -1,14 +1,26 @@
-button, .btn {
+button,
+.btn {
     cursor: pointer;
-    background-color: var(--clr2bg);
+    background-color: var(--supportive-green);
+    font-weight: bold;
+    color: white;
     margin: 0.5em;
     border: 0;
-    padding: 0.5em 0.8em;
+    padding: 0.4em 0.8em;
     border-radius: 4px;
 }
 
-button:hover, .btn:hover {
-    background-color: var(--clr2);
+.btn-distructive {
+    background-color: var(--supportive-red);
+}
+
+.btn-distructive:hover {
+    background-color: var(--supportive-red-darker);
+}
+
+button:hover,
+.btn:hover {
+    background-color: var(--supportive-green-darker);
     color: white;
     transition: 0.3s;
 }

@@ -1,11 +1,12 @@
+import { TodoPreviewImportance } from "./TodoPreviewImportance.jsx";
+
 export function TodoPreview({ todo, onToggleTodo }) {
     return (
         <article className="todo-preview">
-            <h2 className={(todo.isDone) ? 'done' : ''} onClick={onToggleTodo}>
+            <h2 onClick={onToggleTodo} className={todo.isDone ? 'done' : ''} style={{ marginRight: '.5em' }}>
                 Todo: {todo.txt}
             </h2>
-            <h4>Todo Importance: {todo.importance}</h4>
-            <img src={`../assets/img/${'todo'}.png`} alt="" />
+            <TodoPreviewImportance importance={todo.importance} />
         </article>
     )
 }
