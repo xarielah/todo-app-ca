@@ -41,7 +41,7 @@ export const todoReducer = (state = initialState, action = {}) => {
             return ({
                 ...state,
                 todos: state.todos.map(todo => {
-                    if (todo.id === action.payload.id) {
+                    if (todo._id === action.payload._id) {
                         return action.payload
                     }
                     return todo
