@@ -19,16 +19,12 @@ export function AppHeader() {
 
     function onLogout() {
         userService.logout()
-            .then(() => {
-                onSetUser(null)
-            })
             .catch((err) => {
                 showErrorMsg('OOPs try again')
             })
     }
 
-    function onSetUser(user) {
-        setUser(user)
+    function onSetUser() {
         navigate('/')
     }
 

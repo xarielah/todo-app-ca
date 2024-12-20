@@ -54,26 +54,29 @@ function get(todoId) {
 }
 
 function remove(todoId) {
-    store.dispatch({ type: REMOVE_TODO, payload: todoId })
-    // Add activity
-    activityService.add()
-    return storageService.remove(TODO_KEY, todoId)
+    return storageService.remove(TODO_KEY, todoId).then(() => {
+        store.dispatch({ type: REMOVE_TODO, payload: todoId })
+        // Add activity
+        activityService.add("User has removed todo with id: " + todoId)
+    })
 }
 
 function save(todo) {
     if (todo._id) {
-        // TODO - updatable fields
         todo.updatedAt = Date.now()
-        store.dispatch({ type: UPDATE_TODO, payload: todo })
-        activityService.add("User has updated todo with id: " + todo._id)
         return storageService.put(TODO_KEY, todo)
+            .then((todo) => {
+                store.dispatch({ type: UPDATE_TODO, payload: todo })
+                activityService.add(`User has updated todo \"${todo.txt}\" with id: ${todo._id}`)
+                return todo
+            })
     } else {
         todo.createdAt = todo.updatedAt = Date.now()
-        store.dispatch({ type: ADD_TODO, payload: todo })
         return storageService.post(TODO_KEY, todo)
             .then(todo => {
+                store.dispatch({ type: ADD_TODO, payload: todo })
                 userService.addUserBalance(10)
-                activityService.add("User has added todo with id: " + todo._id)
+                activityService.add(`User has added todo with id: ${todo._id}`)
                 return todo;
             })
     }

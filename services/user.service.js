@@ -1,5 +1,6 @@
 import { ADD_TO_BALANCE, USER_LOGIN, USER_LOGOUT } from "../store/reducers/userReducer.js";
 import { store } from "../store/store.js";
+import { activityService } from "./activity.service.js";
 import { storageService } from "./async-storage.service.js";
 
 const INITIAL_USER_BALANCE = 10000;
@@ -29,7 +30,11 @@ function login({ username, password }) {
     return storageService.query(STORAGE_KEY)
         .then(users => {
             const user = users.find(user => user.username === username)
-            if (user) return _setLoggedinUser(user)
+            if (user) {
+                activityService.loadUserActivities(user._id)
+                console.log("🚀 ~ login ~ user._id:", user._id)
+                return _setLoggedinUser(user)
+            }
             else return Promise.reject('Invalid login')
         })
 }
@@ -49,27 +54,27 @@ function logout() {
     return Promise.resolve()
 }
 
-function getLoggedinUser() {
+async function getLoggedinUser() {
     const user = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN))
-    if (user)
-        store.dispatch({ type: USER_LOGIN, payload: user })
+    if (user) {
+        const activities = await activityService.get(user._id);
+        store.dispatch({ type: USER_LOGIN, payload: { ...user, activities: activities } })
+    }
     return user;
 }
 
 function addUserBalance(amountToAdd = 10) {
     const user = store.getState().userReducer.user
     if (user) {
-        console.log("🚀 ~ addUserBalance ~ user:", user)
         store.dispatch({ type: ADD_TO_BALANCE, payload: amountToAdd })
         _setLoggedinUser({ ...user, balance: +user.balance + amountToAdd });
         return storageService.put(STORAGE_KEY, { ...user, balance: +user.balance + amountToAdd })
     }
 }
 
-function _setLoggedinUser(user) {
-    const userToSave = { _id: user._id, fullname: user.fullname, balance: user.balance, activities: user.activities }
+async function _setLoggedinUser(user) {
+    const userToSave = { _id: user._id, fullname: user.fullname, balance: user.balance }
     sessionStorage.setItem(STORAGE_KEY_LOGGEDIN, JSON.stringify(userToSave))
-    console.log("🚀 ~ _setLoggedinUser ~ userToSave:", userToSave)
     store.dispatch({ type: USER_LOGIN, payload: user })
     return userToSave
 }

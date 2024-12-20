@@ -11,6 +11,7 @@ import { Home } from "./pages/Home.jsx";
 import { TodoDetails } from "./pages/TodoDetails.jsx";
 import { TodoEdit } from "./pages/TodoEdit.jsx";
 import { TodoIndex } from "./pages/TodoIndex.jsx";
+import { UserDetails } from "./pages/UserDetails.jsx";
 import { store } from "./store/store.js";
 
 export function RootCmp() {
@@ -32,6 +33,7 @@ export function RootCmp() {
                             <Route path="/todo/edit" element={<TodoEdit />} />
                             <Route path="/todo" element={<TodoIndex />} />
                             <Route path="/dashboard" element={<Dashboard />} />
+                            <Route path="/user" element={<UserDetails />} />
                         </Routes>
                     </main>
                 </section>

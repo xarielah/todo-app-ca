@@ -1,4 +1,6 @@
+import { ADD_ACTIVITY } from "../store/reducers/userReducer.js";
 import { store } from "../store/store.js";
+import { storageService } from "./async-storage.service.js";
 
 const ACTIVITY_STORAGE_KEY = 'activityDB'
 
@@ -7,11 +9,10 @@ export const activityService = {
     add
 };
 
-function get() {
-    const user = store.getState().userReducer.user
-    if (user) {
+function get(userId) {
+    if (userId) {
         return storageService.query(ACTIVITY_STORAGE_KEY)
-            .then(activities => activities.filter(activity => activity.userId === user._id))
+            .then(activities => activities.filter(activity => activity.userId === userId))
     } else {
         return Promise.resolve([])
     }
@@ -24,6 +25,7 @@ function add(action) {
         const userId = user._id
         const activity = { userId, action, createdAt: Date.now() }
         return storageService.post(ACTIVITY_STORAGE_KEY, activity)
+            .then(activitiy => store.dispatch({ type: ADD_ACTIVITY, payload: activitiy }))
     }
 }
 
