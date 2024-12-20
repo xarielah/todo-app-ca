@@ -6,7 +6,7 @@ import { todoService } from "../services/todo.service.js"
 import { SET_FILTER_BY } from "../store/reducers/todoReducer.js"
 import { store } from "../store/store.js"
 
-const { useState, useEffect } = React
+const { useEffect } = React
 const { Link, useSearchParams } = ReactRouterDOM
 const { useSelector } = ReactRedux
 
@@ -46,7 +46,7 @@ export function TodoIndex() {
         const todoToSave = { ...todo, isDone: !todo.isDone }
         todoService.save(todoToSave)
             .then((savedTodo) => {
-                setTodos(prevTodos => prevTodos.map(currTodo => (currTodo._id !== todo._id) ? currTodo : { ...savedTodo }))
+                // setTodos(prevTodos => prevTodos.map(currTodo => (currTodo._id !== todo._id) ? currTodo : { ...savedTodo }))
                 showSuccessMsg(`Todo is ${(savedTodo.isDone) ? 'done' : 'back on your list'}`)
             })
             .catch(err => {
