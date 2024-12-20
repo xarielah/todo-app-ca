@@ -1,4 +1,4 @@
-import { USER_LOGIN, USER_LOGOUT } from "../store/reducers/userReducer.js";
+import { ADD_TO_BALANCE, USER_LOGIN, USER_LOGOUT } from "../store/reducers/userReducer.js";
 import { store } from "../store/store.js";
 import { storageService } from "./async-storage.service.js";
 
@@ -11,7 +11,8 @@ export const userService = {
     signup,
     getById,
     query,
-    getEmptyCredentials
+    getEmptyCredentials,
+    addUserBalance
 }
 const STORAGE_KEY_LOGGEDIN = 'user'
 const STORAGE_KEY = 'userDB'
@@ -55,9 +56,20 @@ function getLoggedinUser() {
     return user;
 }
 
+function addUserBalance(amountToAdd = 10) {
+    const user = store.getState().userReducer.user
+    if (user) {
+        console.log("🚀 ~ addUserBalance ~ user:", user)
+        store.dispatch({ type: ADD_TO_BALANCE, payload: amountToAdd })
+        _setLoggedinUser({ ...user, balance: +user.balance + amountToAdd });
+        return storageService.put(STORAGE_KEY, { ...user, balance: +user.balance + amountToAdd })
+    }
+}
+
 function _setLoggedinUser(user) {
-    const userToSave = { _id: user._id, fullname: user.fullname }
+    const userToSave = { _id: user._id, fullname: user.fullname, balance: user.balance, activities: user.activities }
     sessionStorage.setItem(STORAGE_KEY_LOGGEDIN, JSON.stringify(userToSave))
+    console.log("🚀 ~ _setLoggedinUser ~ userToSave:", userToSave)
     store.dispatch({ type: USER_LOGIN, payload: user })
     return userToSave
 }
