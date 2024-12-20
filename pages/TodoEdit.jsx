@@ -3,14 +3,17 @@ import { todoService } from "../services/todo.service.js"
 
 const { useState, useEffect } = React
 const { useNavigate, useParams } = ReactRouterDOM
+const { useSelector } = ReactRedux
 
 export function TodoEdit() {
+    const { user } = useSelector(state => state.userReducer)
     const [todoToEdit, setTodoToEdit] = useState(todoService.getEmptyTodo())
     const navigate = useNavigate()
     const params = useParams()
 
     useEffect(() => {
-        if (params.todoId) loadTodo()
+        if (!user) return navigate('/', { replace: true })
+        if (user && params.todoId) loadTodo()
     }, [])
 
     function loadTodo() {
