@@ -44,7 +44,7 @@ export function TodoFilter({ storeFilterBy }) {
 
     const { txt = '', importance = '' } = filterBy
     return (
-        <aside className="todo-filter">
+        <aside className="todo-filter fancy-container">
             <h2>Filter Todos</h2>
             <form onSubmit={e => e.preventDefault()}>
                 <label htmlFor="txt" style={{ display: 'grid', alignItems: 'center' }}>

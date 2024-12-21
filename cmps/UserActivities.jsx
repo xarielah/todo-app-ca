@@ -7,10 +7,9 @@ export const UserActivities = () => {
     const activities = user.activities;
 
     return <section className="user-activities">
-        <h2>Your activities</h2>
         {activities.length === 0 && <p>No activities yet</p>}
         {activities.length > 0 &&
-            <ul className="user-activities-list">
+            <ul className="user-activities-list scrollable-list-container" style={{ margin: '0 0 1em 0' }}>
                 {activities.map(activity =>
                     <UserActivity activity={activity} key={activity._id} />
                 )}

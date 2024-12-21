@@ -9,15 +9,19 @@ export const UserDetails = () => {
     const { user } = useSelector(state => state.userReducer)
 
     useEffect(() => {
-        if (!user)
-            navigate("/")
+        // if (!user)
+        // navigate("/")
     }, [])
 
     if (user)
         return <section className="user-details">
-            <h1 style={{ fontSize: "2em" }}>Welcome {user.fullname}!</h1>
-            <h2>Your balance is: {user.balance.toLocaleString()}</h2>
-            <hr />
-            <UserActivities />
+            <aside className="fancy-container">
+                <h1 style={{ fontSize: "2em" }}>Welcome {user.fullname}!</h1>
+                <h2>Your balance is: {user.balance.toLocaleString()}</h2>
+            </aside>
+            <section>
+                <h2>Your activities</h2>
+                <UserActivities />
+            </section>
         </section>
 }

@@ -1,4 +1,4 @@
-import { ADD_TODO, DONE_TODO_LOADING, REMOVE_TODO, SET_TODOS, UPDATE_TODO, UPDATE_TODO_COUNT } from '../store/reducers/todoReducer.js'
+import { ADD_TODO, DONE_TODO_LOADING, REMOVE_TODO, SET_TODOS, UPDATE_PROGRESS, UPDATE_TODO } from '../store/reducers/todoReducer.js'
 import { store } from '../store/store.js'
 import { activityService } from './activity.service.js'
 import { storageService } from './async-storage.service.js'
@@ -25,12 +25,7 @@ function query() {
     const { filterBy } = store.getState().todoReducer
     return storageService.query(TODO_KEY)
         .then(todos => {
-            store.dispatch({
-                type: UPDATE_TODO_COUNT, payload: {
-                    total: todos.length,
-                    done: todos.filter(todo => todo.isDone).length
-                }
-            })
+            store.dispatch({ type: UPDATE_PROGRESS, payload: todos })
             if (filterBy.txt) {
                 const regExp = new RegExp(filterBy.txt, 'i')
                 todos = todos.filter(todo => regExp.test(todo.txt))

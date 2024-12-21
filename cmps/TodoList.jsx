@@ -37,10 +37,11 @@ export function TodoList({ todos, onRemoveTodo, onToggleTodo }) {
                     <button onClick={() => handleRemoveDialog(removeTodoId)}>Remove</button>
                 </footer>
             </dialog>
-            <ul className="todo-list">
+            <ul className="todo-list scrollable-list-container">
                 {todos.length === 0 && <p>There are no todos to show here.</p>}
-                {todos.length > 0 && todos.map(todo =>
-                    <li key={todo._id}>
+                {todos.length > 0 && todos.map(todo => {
+                    console.log(todo)
+                    return (<li key={todo._id}>
                         <div style={{ borderLeft: `5px solid ${todo.color}` }}>
                             <TodoPreview
                                 onRemoveTodo={onRemoveTodo}
@@ -53,7 +54,8 @@ export function TodoList({ todos, onRemoveTodo, onToggleTodo }) {
                             <button><Link to={`/todo/${todo._id}`}>Details</Link></button>
                             <button><Link to={`/todo/edit/${todo._id}`}>Edit</Link></button>
                         </section>
-                    </li>
+                    </li>)
+                }
                 )}
             </ul>
         </React.Fragment>

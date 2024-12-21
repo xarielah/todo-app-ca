@@ -6,22 +6,23 @@ export const SET_TODOS = "SET_TODOS";
 export const DONE_TODO_LOADING = "DONE_TODO_LOADING";
 export const TODO_LOAD = "TODO_LOAD";
 export const SET_FILTER_BY = "SET_FILTER_BY";
-export const UPDATE_TODO_COUNT = "UPDATE_TODO_COUNT";
+export const UPDATE_PROGRESS = "UPDATE_PROGRESS";
 
 const initialState = {
     loading: true,
     todos: [],
-    totalCount: 0,
+    progress: 0,
     filterBy: { txt: "", importance: "" },
 }
 
 export const todoReducer = (state = initialState, action = {}) => {
     switch (action.type) {
-        case UPDATE_TODO_COUNT:
+        case UPDATE_PROGRESS:
+            const doneLength = action.payload.filter(todo => todo.isDone).length;
+            const todosLength = action.payload.length || 1;
             return ({
                 ...state,
-                totalCount: action.payload.total,
-                doneCount: action.payload.done,
+                progress: doneLength / todosLength
             })
         case TODO_LOAD:
             return ({
@@ -50,19 +51,7 @@ export const todoReducer = (state = initialState, action = {}) => {
         case REMOVE_TODO:
             return ({
                 ...state,
-                todos: state.todos.filter(todo => {
-                    // Update todo count
-                    if (todo._id === action.payload) {
-                        store.dispatch({
-                            type: UPDATE_TODO_COUNT,
-                            payload: {
-                                total: state.totalCount - 1,
-                                done: todo.isDone ? state.doneCount - 1 : state.doneCount
-                            }
-                        })
-                    }
-                    return todo._id !== action.payload
-                }),
+                todos: state.todos.filter(todo => todo._id !== action.payload),
             })
         case SET_TODOS:
             return ({
