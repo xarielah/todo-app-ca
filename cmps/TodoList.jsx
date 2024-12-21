@@ -40,7 +40,6 @@ export function TodoList({ todos, onRemoveTodo, onToggleTodo }) {
             <ul className="todo-list scrollable-list-container">
                 {todos.length === 0 && <p>There are no todos to show here.</p>}
                 {todos.length > 0 && todos.map(todo => {
-                    console.log(todo)
                     return (<li key={todo._id}>
                         <div style={{ borderLeft: `5px solid ${todo.color}` }}>
                             <TodoPreview

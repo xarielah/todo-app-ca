@@ -6,30 +6,33 @@ import { utilService } from "../services/util.service.js"
 import { SET_FILTER_BY } from "../store/reducers/todoReducer.js"
 import { store } from "../store/store.js"
 
-const { useEffect } = React
-const { Link, useSearchParams } = ReactRouterDOM
+const { useEffect, useRef } = React
+const { useSearchParams } = ReactRouterDOM
 const { useSelector } = ReactRedux
 
 export function TodoIndex() {
     const { todos, loading } = useSelector(state => state.todoReducer);
     const { filterBy } = useSelector(state => state.todoReducer);
     const [searchParams, setSearchParams] = useSearchParams();
+    // Allows me to optimize query to be initially fetched once after we update filterBy
+    // from the search params.
+    const hasRendered = useRef(false)
 
     useEffect(() => {
-        store.dispatch({
-            type: SET_FILTER_BY,
-            payload: { ...todoService.getFilterFromSearchParams(searchParams) }
-        })
-    }, [])
-
-    useEffect(() => {
-        setSearchParams(utilService.getTruthyValues(filterBy))
-        todoService.query()
-            .catch(err => {
-                console.error('err:', err)
-                showErrorMsg('Cannot load todos')
-            })
+        if (hasRendered.current) {
+            setSearchParams(utilService.getTruthyValues(filterBy))
+            todoService.query()
+                .catch(err => {
+                    console.error('err:', err)
+                    showErrorMsg('Cannot load todos')
+                })
+        }
     }, [filterBy])
+
+    useEffect(() => {
+        store.dispatch({ type: SET_FILTER_BY, payload: { ...todoService.getFilterFromSearchParams(searchParams) } })
+        hasRendered.current = true
+    }, [])
 
     function onRemoveTodo(todoId) {
         todoService.remove(todoId)
