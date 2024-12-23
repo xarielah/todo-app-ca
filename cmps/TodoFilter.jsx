@@ -1,3 +1,4 @@
+import { STATUS_FILTERS } from "../services/todo.service.js";
 import { utilService } from "../services/util.service.js";
 import { SET_FILTER_BY } from "../store/reducers/todoReducer.js";
 import { store } from "../store/store.js";
@@ -47,6 +48,13 @@ export function TodoFilter({ storeFilterBy }) {
         <aside className="todo-filter fancy-container">
             <h2>Filter Todos</h2>
             <form onSubmit={e => e.preventDefault()}>
+                <label htmlFor="status" style={{ display: 'grid', alignItems: 'center' }}>
+                    <select value={filterBy.status} onChange={handleChange} id="status" name="status">
+                        <option value={STATUS_FILTERS.ALL}>All</option>
+                        <option value={STATUS_FILTERS.ACTIVE}>Active</option>
+                        <option value={STATUS_FILTERS.DONE}>Done</option>
+                    </select>
+                </label>
                 <label htmlFor="txt" style={{ display: 'grid', alignItems: 'center' }}>
                     <span>Text: </span>
                     <input
@@ -71,10 +79,11 @@ export function TodoFilter({ storeFilterBy }) {
                         name="importance"
                     />
                 </label>
-            </form>
+            </form >
             {user && <button>
                 <Link to="/todo/edit" className="btn">Add Todo</Link>
-            </button>}
-        </aside>
+            </button>
+            }
+        </aside >
     )
 }

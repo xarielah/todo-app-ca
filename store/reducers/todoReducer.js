@@ -8,12 +8,13 @@ export const TODO_LOAD = "TODO_LOAD";
 export const SET_FILTER_BY = "SET_FILTER_BY";
 export const UPDATE_PROGRESS = "UPDATE_PROGRESS";
 
+
 const initialState = {
     loading: true,
     todos: [],
     total: 0,
     done: 0,
-    filterBy: { txt: "", importance: "" },
+    filterBy: { txt: "", importance: 1, status: 'all' },
 }
 
 export const todoReducer = (state = initialState, action = {}) => {

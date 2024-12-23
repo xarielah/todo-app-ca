@@ -6,6 +6,12 @@ import { storageService } from './async-storage.service.js'
 import { userService } from './user.service.js'
 import { utilService } from './util.service.js'
 
+export const STATUS_FILTERS = Object.freeze({
+    ALL: 'all',
+    ACTIVE: 'active',
+    DONE: 'done'
+});
+
 const TODO_KEY = 'todoDB'
 _createTodos()
 
@@ -32,6 +38,15 @@ function query() {
                     total: todos.length
                 }
             })
+
+            if (filterBy.status === STATUS_FILTERS.ACTIVE) {
+                todos = todos.filter(todo => !todo.isDone)
+            }
+
+            if (filterBy.status === STATUS_FILTERS.DONE) {
+                todos = todos.filter(todo => todo.isDone)
+            }
+
             if (filterBy.txt) {
                 const regExp = new RegExp(filterBy.txt, 'i')
                 todos = todos.filter(todo => regExp.test(todo.txt))
@@ -98,7 +113,7 @@ function getEmptyTodo(txt = '', importance = 5) {
 }
 
 function getDefaultFilter() {
-    return { txt: '', importance: 0 }
+    return { txt: '', importance: 1 }
 }
 
 function getFilterFromSearchParams(searchParams) {
