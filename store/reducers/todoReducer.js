@@ -14,7 +14,7 @@ const initialState = {
     todos: [],
     total: 0,
     done: 0,
-    filterBy: { txt: "", importance: 1, status: 'all' },
+    filterBy: { txt: "", importance: '1', status: 'all' },
 }
 
 export const todoReducer = (state = initialState, action = {}) => {

@@ -113,14 +113,18 @@ function getEmptyTodo(txt = '', importance = 5) {
 }
 
 function getDefaultFilter() {
-    return { txt: '', importance: 1 }
+    return { txt: '', importance: 1, status: 'all' }
 }
 
 function getFilterFromSearchParams(searchParams) {
     const defaultFilter = getDefaultFilter()
     const filterBy = {}
     for (const field in defaultFilter) {
-        filterBy[field] = searchParams.get(field) || ''
+        if (field === 'importance') {
+            filterBy[field] = +searchParams.get(field) || 1
+        } else {
+            filterBy[field] = searchParams.get(field) || ''
+        }
     }
     return filterBy
 }

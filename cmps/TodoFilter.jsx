@@ -8,14 +8,9 @@ const { useRef, useState, useEffect } = React
 const { Link } = ReactRouterDOM
 
 export function TodoFilter({ storeFilterBy }) {
-    const [filterBy, setFilterBy] = useState({})
+    const [filterBy, setFilterBy] = useState(storeFilterBy)
     const onFilterDebounce = useRef(utilService.debounce(handleFilterChange, 500)).current
     const { user } = useSelector(state => state.userReducer);
-
-
-    useEffect(() => {
-        setFilterBy(storeFilterBy)
-    }, []);
 
     function handleFilterChange(filterBy) {
         store.dispatch({ type: SET_FILTER_BY, payload: { ...filterBy } })
@@ -43,7 +38,7 @@ export function TodoFilter({ storeFilterBy }) {
     }
 
 
-    const { txt = '', importance = '' } = filterBy
+    const { txt = '', importance = 1, status = 'all' } = filterBy
     return (
         <aside className="todo-filter fancy-container">
             <h2>Filter Todos</h2>
