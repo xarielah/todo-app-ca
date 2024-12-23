@@ -23,7 +23,6 @@ export const statusBarReducer = (state = initialState, action = {}) => {
             return ({
                 ...state,
                 total: state.total + 1,
-                done: state.done
             })
         case ADD_DONE_TODO:
             return ({
@@ -35,7 +34,6 @@ export const statusBarReducer = (state = initialState, action = {}) => {
             return ({
                 ...state,
                 total: state.total - 1,
-                done: state.done
             })
         case REMOVE_DONE_TODO:
             return ({
