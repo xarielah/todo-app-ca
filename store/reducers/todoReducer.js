@@ -6,25 +6,24 @@ export const SET_TODOS = "SET_TODOS";
 export const DONE_TODO_LOADING = "DONE_TODO_LOADING";
 export const TODO_LOAD = "TODO_LOAD";
 export const SET_FILTER_BY = "SET_FILTER_BY";
-export const UPDATE_PROGRESS = "UPDATE_PROGRESS";
+
+export const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
+export const SET_PAGE_COUNT = "SET_PAGE_COUNT";
 
 
 const initialState = {
     loading: true,
     todos: [],
-    total: 0,
-    done: 0,
     filterBy: { txt: "", importance: '1', status: 'all' },
+    pagination: {
+        currentPage: 1,
+        amountPerPage: 5,
+        totalPages: 0,
+    }
 }
 
 export const todoReducer = (state = initialState, action = {}) => {
     switch (action.type) {
-        case UPDATE_PROGRESS:
-            return ({
-                ...state,
-                done: action.payload.done,
-                total: action.payload.total
-            })
         case TODO_LOAD:
             return ({
                 ...state,
@@ -70,6 +69,22 @@ export const todoReducer = (state = initialState, action = {}) => {
                 ...state,
                 filterBy: {
                     ...action.payload
+                }
+            })
+        case SET_CURRENT_PAGE:
+            return ({
+                ...state,
+                pagination: {
+                    ...state.pagination,
+                    currentPage: action.payload
+                }
+            })
+        case SET_PAGE_COUNT:
+            return ({
+                ...state,
+                pagination: {
+                    ...state.pagination,
+                    totalPages: action.payload
                 }
             })
         default:

@@ -1,5 +1,6 @@
 import { TodoFilter } from "../cmps/TodoFilter.jsx"
 import { TodoList } from "../cmps/TodoList.jsx"
+import { TodoPagination } from "../cmps/TodoPagination.jsx"
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
 import { todoService } from "../services/todo.service.js"
 import { utilService } from "../services/util.service.js"
@@ -12,7 +13,7 @@ const { useSearchParams } = ReactRouterDOM
 const { useSelector } = ReactRedux
 
 export function TodoIndex() {
-    const { todos, loading } = useSelector(state => state.todoReducer);
+    const { todos, loading, pagination: { currentPage, amountPerPage } } = useSelector(state => state.todoReducer);
     const { filterBy } = useSelector(state => state.todoReducer);
     const [searchParams, setSearchParams] = useSearchParams();
     // Allows me to optimize query to be initially fetched once after we update filterBy
@@ -67,11 +68,19 @@ export function TodoIndex() {
     }
 
     if (loading) return <div>Loading...</div>
+    const start = (currentPage - 1) * amountPerPage;
+    console.log("🚀 ~ TodoIndex ~ start:", start)
+    const end = currentPage * amountPerPage
+    console.log("🚀 ~ TodoIndex ~ end:", end)
+    console.log("🚀 ~ TodoIndex ~ amountPerPage:", amountPerPage)
+    console.log("🚀 ~ TodoIndex ~ currentPage:", currentPage)
+    const pagedTodos = todos.slice(start, end)
     return (
         <section className="todo-index">
             <section className="main-todo-wrapper">
                 <TodoFilter storeFilterBy={filterBy} />
-                <TodoList todos={todos} onRemoveTodo={onRemoveTodo} onToggleTodo={onToggleTodo} />
+                <TodoList todos={pagedTodos} onRemoveTodo={onRemoveTodo} onToggleTodo={onToggleTodo} />
+                <TodoPagination />
             </section>
         </section>
     )

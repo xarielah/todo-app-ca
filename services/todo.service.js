@@ -1,5 +1,5 @@
 import { ADD_DONE_TODO, ADD_ONGOING_TODO, REMOVE_DONE_TODO, REMOVE_ONGOING_TODO, SET_TODO_COUNTS } from '../store/reducers/statusBarReducer.js'
-import { ADD_TODO, DONE_TODO_LOADING, REMOVE_TODO, SET_TODOS, UPDATE_TODO } from '../store/reducers/todoReducer.js'
+import { ADD_TODO, DONE_TODO_LOADING, REMOVE_TODO, SET_CURRENT_PAGE, SET_PAGE_COUNT, SET_TODOS, UPDATE_TODO } from '../store/reducers/todoReducer.js'
 import { store } from '../store/store.js'
 import { activityService } from './activity.service.js'
 import { storageService } from './async-storage.service.js'
@@ -57,6 +57,9 @@ function query() {
             }
 
             store.dispatch({ type: SET_TODOS, payload: todos })
+            const amountPerPage = store.getState().todoReducer.pagination.amountPerPage || 5
+            store.dispatch({ type: SET_PAGE_COUNT, payload: Math.ceil(todos.length / amountPerPage) })
+            store.dispatch({ type: SET_CURRENT_PAGE, payload: 1 })
         })
         .finally(() => store.dispatch({ type: DONE_TODO_LOADING }))
 }
