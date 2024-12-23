@@ -1,0 +1,35 @@
+.app-status-bar {
+    padding: 0 20px;
+    height: 50px;
+    background-color: var(--color-primary);
+    color: var(--color-primary-contrast);
+    font-size: 1.2rem;
+}
+
+.app-status-bar progress {
+    appearance: none;
+    height: 20px;
+    border: none;
+    background-color: var(--color-primary-contrast);
+    text-align: center;
+}
+
+.app-status-bar progress::-webkit-progress-bar {
+    border-radius: 5px;
+    background-color: #eee;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+}
+
+.app-status-bar progress::-webkit-progress-value {
+    border-radius: 5px;
+    background-color: var(--supportive-green);
+    text-align: center;
+}
+
+.app-status-bar progress:after {
+    content: attr(value)'%';
+    position: absolute;
+    top: 9px;
+    font-weight: bold;
+    z-index: 10;
+}
