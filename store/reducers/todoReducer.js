@@ -11,18 +11,18 @@ export const UPDATE_PROGRESS = "UPDATE_PROGRESS";
 const initialState = {
     loading: true,
     todos: [],
-    progress: 0,
+    total: 0,
+    done: 0,
     filterBy: { txt: "", importance: "" },
 }
 
 export const todoReducer = (state = initialState, action = {}) => {
     switch (action.type) {
         case UPDATE_PROGRESS:
-            const doneLength = action.payload.filter(todo => todo.isDone).length;
-            const todosLength = action.payload.length || 1;
             return ({
                 ...state,
-                progress: doneLength / todosLength
+                done: action.payload.done,
+                total: action.payload.total
             })
         case TODO_LOAD:
             return ({
@@ -36,7 +36,6 @@ export const todoReducer = (state = initialState, action = {}) => {
                     ...state.todos,
                     action.payload
                 ],
-                todoCount: state.todoCount + 1
             })
         case UPDATE_TODO:
             return ({

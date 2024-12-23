@@ -1,4 +1,5 @@
-import { ADD_TODO, DONE_TODO_LOADING, REMOVE_TODO, SET_TODOS, UPDATE_PROGRESS, UPDATE_TODO } from '../store/reducers/todoReducer.js'
+import { ADD_DONE_TODO, ADD_ONGOING_TODO, REMOVE_DONE_TODO, REMOVE_ONGOING_TODO, SET_TODO_COUNTS } from '../store/reducers/statusBarReducer.js'
+import { ADD_TODO, DONE_TODO_LOADING, REMOVE_TODO, SET_TODOS, UPDATE_TODO } from '../store/reducers/todoReducer.js'
 import { store } from '../store/store.js'
 import { activityService } from './activity.service.js'
 import { storageService } from './async-storage.service.js'
@@ -25,7 +26,12 @@ function query() {
     const { filterBy } = store.getState().todoReducer
     return storageService.query(TODO_KEY)
         .then(todos => {
-            store.dispatch({ type: UPDATE_PROGRESS, payload: todos })
+            store.dispatch({
+                type: SET_TODO_COUNTS, payload: {
+                    done: todos.filter(todo => todo.isDone).length,
+                    total: todos.length
+                }
+            })
             if (filterBy.txt) {
                 const regExp = new RegExp(filterBy.txt, 'i')
                 todos = todos.filter(todo => regExp.test(todo.txt))
@@ -49,8 +55,13 @@ function get(todoId) {
 }
 
 function remove(todoId) {
-    return storageService.remove(TODO_KEY, todoId).then(() => {
+    return storageService.remove(TODO_KEY, todoId).then((removedEntity) => {
         store.dispatch({ type: REMOVE_TODO, payload: todoId })
+        if (removedEntity.isDone) {
+            store.dispatch({ type: REMOVE_DONE_TODO })
+        } else {
+            store.dispatch({ type: REMOVE_ONGOING_TODO })
+        }
         // Add activity
         activityService.add("User has removed todo with id: " + todoId)
     })
@@ -69,6 +80,11 @@ function save(todo) {
         todo.createdAt = todo.updatedAt = Date.now()
         return storageService.post(TODO_KEY, todo)
             .then(todo => {
+                if (todo.isDone) {
+                    store.dispatch({ type: ADD_DONE_TODO })
+                } else {
+                    store.dispatch({ type: ADD_ONGOING_TODO })
+                }
                 store.dispatch({ type: ADD_TODO, payload: todo })
                 userService.addUserBalance(10)
                 activityService.add(`User has added todo with id: ${todo._id}`)

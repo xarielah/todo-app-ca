@@ -1,3 +1,4 @@
+import { statusBarReducer } from "./reducers/statusBarReducer.js";
 import { todoReducer } from "./reducers/todoReducer.js";
 import { userReducer } from "./reducers/userReducer.js";
 
@@ -7,7 +8,8 @@ const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOO
 
 const reducers = combineReducers({
     userReducer,
-    todoReducer
+    todoReducer,
+    statusBarReducer
 });
 
 export const store = createStore(reducers, composeEnhancers());

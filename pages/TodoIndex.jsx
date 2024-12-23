@@ -3,6 +3,7 @@ import { TodoList } from "../cmps/TodoList.jsx"
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
 import { todoService } from "../services/todo.service.js"
 import { utilService } from "../services/util.service.js"
+import { DECREASE_DONE_TODO, INCREASE_DONE_TODO } from "../store/reducers/statusBarReducer.js"
 import { SET_FILTER_BY } from "../store/reducers/todoReducer.js"
 import { store } from "../store/store.js"
 
@@ -46,9 +47,17 @@ export function TodoIndex() {
     }
 
     function onToggleTodo(todo) {
+
         const todoToSave = { ...todo, isDone: !todo.isDone }
         todoService.save(todoToSave)
             .then((savedTodo) => {
+                if (todo.isDone) {
+                    // If initial state of todo is done, we'd like to decrease the done count
+                    store.dispatch({ type: DECREASE_DONE_TODO })
+                } else {
+                    // If initial state of todo is not done, we'd like to increase the done count
+                    store.dispatch({ type: INCREASE_DONE_TODO })
+                }
                 showSuccessMsg(`Todo is ${(savedTodo.isDone) ? 'done' : 'back on your list'}`)
             })
             .catch(err => {
@@ -60,15 +69,10 @@ export function TodoIndex() {
     if (loading) return <div>Loading...</div>
     return (
         <section className="todo-index">
-
             <section className="main-todo-wrapper">
                 <TodoFilter storeFilterBy={filterBy} />
                 <TodoList todos={todos} onRemoveTodo={onRemoveTodo} onToggleTodo={onToggleTodo} />
             </section>
-            {/* <hr /> */}
-            {/* <div style={{ width: '60%', margin: 'auto' }}>
-                <DataTable todos={todos} onRemoveTodo={onRemoveTodo} />
-            </div> */}
         </section>
     )
 }
